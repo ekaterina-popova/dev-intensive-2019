@@ -6,7 +6,7 @@ abstract class BaseMessage(
     val id: String,
     val from: User?,
     val chat: Chat,
-    val isIncoming: Boolean = false,
+    val isIncoming: Boolean,
     val date: Date = Date()
 ) {
     abstract fun formatMessage(): String
@@ -20,12 +20,23 @@ abstract class BaseMessage(
             chat: Chat,
             date: Date = Date(),
             payload: Any?,
-            type: String = "text"
+            type: String = "text",
+            isIncoming: Boolean = false
         ): BaseMessage {
             lastId++
             return when (type) {
-                "image" -> ImageMessage("$lastId", from, chat, date = date, image = payload as String)
-                else -> TextMessage("$lastId", from, chat, date = date, text = payload as String)
+                "image" -> ImageMessage(
+                    "$lastId",
+                    from,
+                    chat,
+                    date = date,
+                    image = payload as String,
+                    isIncoming = isIncoming
+                )
+                else -> TextMessage(
+                    "$lastId", from, chat, date = date, text = payload as String, isIncoming =
+                    isIncoming
+                )
             }
         }
     }

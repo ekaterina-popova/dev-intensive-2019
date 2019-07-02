@@ -31,7 +31,12 @@ object Utils {
             newFullName += convertCharacter(fullName[i])
         }
         val parts = newFullName.split(" ")
-        return parts[0] + divider1 + parts[1]
+        var result = ""
+        for (i in 0 until parts.size - 1) {
+            result += parts[i] + divider1
+        }
+        result += parts[parts.size - 1]
+        return result
     }
 
     private fun convertCharacter(char: Char): String {
