@@ -40,7 +40,9 @@ object Utils {
         for (i in 0 until Vocabulary.values().size) {
             if (char1 == Vocabulary.values()[i].russianChar) {
                 return if (isUpperCase) {
-                    Vocabulary.values()[i].englishChar[0].toString().toUpperCase()
+                    Vocabulary.values()[i].englishChar[0].toString().toUpperCase() + Vocabulary.values()[i].englishChar.substring(
+                        1
+                    )
                 } else {
                     Vocabulary.values()[i].englishChar
                 }
