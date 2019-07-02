@@ -22,7 +22,10 @@ fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND): Date {
 }
 
 fun Date.humanizeDiff(date: Date = Date()): String {
-    val diff = abs(this.time - date.time)
+    var diff = this.time - date.time
+    var isNonNegativeNumber = true
+    if (diff < 0) isNonNegativeNumber = false
+    diff = abs(diff)
     for (i in 0 until Intervals.values().size) {
         if (Intervals.values()[i].leftBorder < diff && diff <= Intervals.values()[i].rightBorder) {
             if (diff == Intervals.JUST.leftBorder) {
@@ -30,23 +33,29 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             } else {
                 when (Intervals.values()[i].ordinal) {
                     0 -> return "только что"
-                    1 -> return "несколько секунд назад"
-                    2 -> return "минуту назад"
-                    3 -> return createMessageAboutMinutes(diff)
-                    4 -> return "час назад"
-                    5 -> return createMessageAboutHours(diff)
-                    6 -> return "день назад"
-                    7 -> return createMessageAboutDays(diff)
+                    1 -> return if (isNonNegativeNumber) "через несколько секунд" else "несколько секунд назад"
+                    2 -> return if (isNonNegativeNumber) "через минуту" else "минуту назад"
+                    3 -> return if (isNonNegativeNumber) createMessageAboutMinutesFuture(diff) else createMessageAboutMinutesPast(
+                        diff
+                    )
+                    4 -> return if (isNonNegativeNumber) "через час" else "час назад"
+                    5 -> return if (isNonNegativeNumber) createMessageAboutHoursFuture(diff) else createMessageAboutHoursPast(
+                        diff
+                    )
+                    6 -> return if (isNonNegativeNumber) "через день" else "день назад"
+                    7 -> return if (isNonNegativeNumber) createMessageAboutDaysFuture(diff) else createMessageAboutDaysPast(
+                        diff
+                    )
                 }
             }
         } else if (Intervals.MORE_THAN_A_YEAR_AGO.leftBorder < diff) {
-            return "более года назад"
+            return if (isNonNegativeNumber) "более чем через год" else "более года назад"
         }
     }
     return ""
 }
 
-fun createMessageAboutMinutes(diff: Long): String {
+fun createMessageAboutMinutesPast(diff: Long): String {
     val minutes = diff / TimeUnits.MINUTE.millisecond
     val lastDigit = minutes % 10
     var message = "$minutes "
@@ -62,7 +71,23 @@ fun createMessageAboutMinutes(diff: Long): String {
     return "$message назад"
 }
 
-fun createMessageAboutHours(diff: Long): String {
+fun createMessageAboutMinutesFuture(diff: Long): String {
+    val minutes = diff / TimeUnits.MINUTE.millisecond
+    val lastDigit = minutes % 10
+    var message = "через $minutes "
+    message += if (minutes in 11..14) {
+        "минут"
+    } else {
+        when (lastDigit) {
+            1L -> "минуту"
+            2L, 3L, 4L -> "минуты"
+            else -> "минут"
+        }
+    }
+    return message
+}
+
+fun createMessageAboutHoursPast(diff: Long): String {
     val hours = diff / TimeUnits.HOUR.millisecond
     val lastDigit = hours % 10
     var message = "$hours "
@@ -78,7 +103,23 @@ fun createMessageAboutHours(diff: Long): String {
     return "$message назад"
 }
 
-fun createMessageAboutDays(diff: Long): String {
+fun createMessageAboutHoursFuture(diff: Long): String {
+    val hours = diff / TimeUnits.HOUR.millisecond
+    val lastDigit = hours % 10
+    var message = "через $hours "
+    message += if (hours in 11..14) {
+        "часов"
+    } else {
+        when (lastDigit) {
+            1L -> "час"
+            2L, 3L, 4L -> "часа"
+            else -> "часов"
+        }
+    }
+    return message
+}
+
+fun createMessageAboutDaysPast(diff: Long): String {
     val days = diff / TimeUnits.DAY.millisecond
     val lastDigit = days % 10
     var message = "$days "
@@ -92,6 +133,22 @@ fun createMessageAboutDays(diff: Long): String {
         }
     }
     return "$message назад"
+}
+
+fun createMessageAboutDaysFuture(diff: Long): String {
+    val days = diff / TimeUnits.DAY.millisecond
+    val lastDigit = days % 10
+    var message = "через $days "
+    message += if (days in 11..14) {
+        "дней"
+    } else {
+        when (lastDigit) {
+            1L -> "день"
+            2L, 3L, 4L -> "дня"
+            else -> "дней"
+        }
+    }
+    return message
 }
 
 enum class TimeUnits(
