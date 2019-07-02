@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive.models.enums
+package ru.skillbranch.devintensive.enums
 
 enum class Vocabulary(
     val englishChar: String,

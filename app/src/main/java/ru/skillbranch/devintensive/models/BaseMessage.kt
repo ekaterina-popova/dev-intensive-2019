@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.models
 
-import ru.skillbranch.devintensive.models.enums.MessageType
 import java.util.*
 
 abstract class BaseMessage(
@@ -20,13 +19,13 @@ abstract class BaseMessage(
             from: User?,
             chat: Chat,
             date: Date = Date(),
-            type: MessageType = MessageType.TEXT,
-            payload: Any?
+            payload: Any?,
+            type: String = "text"
         ): BaseMessage {
             lastId++
             return when (type) {
-                MessageType.TEXT -> TextMessage("$lastId", from, chat, date = date, text = payload as String)
-                MessageType.IMAGE -> ImageMessage("$lastId", from, chat, date = date, image = payload as String)
+                "image" -> ImageMessage("$lastId", from, chat, date = date, image = payload as String)
+                else -> TextMessage("$lastId", from, chat, date = date, text = payload as String)
             }
         }
     }
