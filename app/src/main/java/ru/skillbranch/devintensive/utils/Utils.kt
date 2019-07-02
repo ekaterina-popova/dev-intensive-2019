@@ -40,7 +40,7 @@ object Utils {
         for (i in 0 until Vocabulary.values().size) {
             if (char1 == Vocabulary.values()[i].russianChar) {
                 return if (isUpperCase) {
-                    Vocabulary.values()[i].englishChar.toUpperCase()
+                    Vocabulary.values()[i].englishChar[0].toString().toUpperCase()
                 } else {
                     Vocabulary.values()[i].englishChar
                 }
@@ -83,7 +83,7 @@ enum class Vocabulary(
     CHAR_15("n", "н"),
     CHAR_16("o", "о"),
     CHAR_17("p", "п"),
-    CHAR_18("a", "р"),
+    CHAR_18("r", "р"),
     CHAR_19("s", "с"),
     CHAR_20("t", "т"),
     CHAR_21("u", "у"),

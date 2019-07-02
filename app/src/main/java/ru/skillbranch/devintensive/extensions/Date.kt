@@ -42,7 +42,6 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         } else if (Intervals.MORE_THAN_A_YEAR_AGO.leftBorder < diff) {
             return "более года назад"
         }
-        return ""
     }
     return ""
 }
