@@ -1,6 +1,6 @@
 package ru.skillbranch.devintensive.models
 
-import ru.skillbranch.devintensive.enums.MessageType
+import ru.skillbranch.devintensive.models.enums.MessageType
 import java.util.*
 
 abstract class BaseMessage(

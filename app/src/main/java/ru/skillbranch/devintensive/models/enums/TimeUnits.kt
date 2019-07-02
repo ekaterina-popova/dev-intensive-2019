@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive.enums
+package ru.skillbranch.devintensive.models.enums
 
 enum class TimeUnits(
     var millisecond: Long

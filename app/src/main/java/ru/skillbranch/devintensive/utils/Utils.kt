@@ -1,6 +1,6 @@
 package ru.skillbranch.devintensive.utils
 
-import ru.skillbranch.devintensive.enums.Vocabulary
+import ru.skillbranch.devintensive.models.enums.Vocabulary
 
 object Utils {
     fun parseFullName(fullName: String?): Pair<String?, String?> {

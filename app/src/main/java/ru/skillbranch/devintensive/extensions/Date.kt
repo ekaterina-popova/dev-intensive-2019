@@ -1,7 +1,7 @@
 package ru.skillbranch.devintensive.extensions
 
-import ru.skillbranch.devintensive.enums.Intervals
-import ru.skillbranch.devintensive.enums.TimeUnits
+import ru.skillbranch.devintensive.models.enums.Intervals
+import ru.skillbranch.devintensive.models.enums.TimeUnits
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
