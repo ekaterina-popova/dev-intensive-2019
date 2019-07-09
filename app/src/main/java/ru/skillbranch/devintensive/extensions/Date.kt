@@ -58,8 +58,9 @@ fun Date.humanizeDiff(date: Date = Date()): String {
 fun createMessageAboutMinutesPast(diff: Long): String {
     val minutes = diff / TimeUnits.MINUTE.millisecond
     val lastDigit = minutes % 10
+    val lastTwoDigits = minutes % 100
     var message = "$minutes "
-    message += if (minutes in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "минут"
     } else {
         when (lastDigit) {
@@ -74,8 +75,9 @@ fun createMessageAboutMinutesPast(diff: Long): String {
 fun createMessageAboutMinutesFuture(diff: Long): String {
     val minutes = diff / TimeUnits.MINUTE.millisecond
     val lastDigit = minutes % 10
+    val lastTwoDigits = minutes % 100
     var message = "через $minutes "
-    message += if (minutes in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "минут"
     } else {
         when (lastDigit) {
@@ -90,8 +92,9 @@ fun createMessageAboutMinutesFuture(diff: Long): String {
 fun createMessageAboutHoursPast(diff: Long): String {
     val hours = diff / TimeUnits.HOUR.millisecond
     val lastDigit = hours % 10
+    val lastTwoDigits = hours % 100
     var message = "$hours "
-    message += if (hours in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "часов"
     } else {
         when (lastDigit) {
@@ -106,8 +109,9 @@ fun createMessageAboutHoursPast(diff: Long): String {
 fun createMessageAboutHoursFuture(diff: Long): String {
     val hours = diff / TimeUnits.HOUR.millisecond
     val lastDigit = hours % 10
+    val lastTwoDigits = hours % 100
     var message = "через $hours "
-    message += if (hours in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "часов"
     } else {
         when (lastDigit) {
@@ -122,8 +126,9 @@ fun createMessageAboutHoursFuture(diff: Long): String {
 fun createMessageAboutDaysPast(diff: Long): String {
     val days = diff / TimeUnits.DAY.millisecond
     val lastDigit = days % 10
+    val lastTwoDigits = days % 100
     var message = "$days "
-    message += if (days in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "дней"
     } else {
         when (lastDigit) {
@@ -138,8 +143,9 @@ fun createMessageAboutDaysPast(diff: Long): String {
 fun createMessageAboutDaysFuture(diff: Long): String {
     val days = diff / TimeUnits.DAY.millisecond
     val lastDigit = days % 10
+    val lastTwoDigits = days % 100
     var message = "через $days "
-    message += if (days in 11..14) {
+    message += if (lastTwoDigits in 11..14) {
         "дней"
     } else {
         when (lastDigit) {
@@ -151,13 +157,58 @@ fun createMessageAboutDaysFuture(diff: Long): String {
     return message
 }
 
+fun createMessageForPlural(value: Int, type: TimeUnits): String {
+    val lastDigit = value % 10
+    val lastTwoDigits = value % 100
+    var message = "$value "
+    message += if (lastTwoDigits in 11..14) {
+        when (type) {
+            TimeUnits.SECOND -> "секунд"
+            TimeUnits.MINUTE -> "минут"
+            TimeUnits.HOUR -> "часов"
+            TimeUnits.DAY -> "дней"
+        }
+    } else {
+        when (lastDigit) {
+            1 -> {
+                when (type) {
+                    TimeUnits.SECOND -> "секунда"
+                    TimeUnits.MINUTE -> "минута"
+                    TimeUnits.HOUR -> "час"
+                    TimeUnits.DAY -> "день"
+                }
+            }
+            2, 3, 4 -> {
+                when (type) {
+                    TimeUnits.SECOND -> "секунды"
+                    TimeUnits.MINUTE -> "минуты"
+                    TimeUnits.HOUR -> "часа"
+                    TimeUnits.DAY -> "дня"
+                }
+            }
+            else ->
+                when (type) {
+                    TimeUnits.SECOND -> "секунд"
+                    TimeUnits.MINUTE -> "минут"
+                    TimeUnits.HOUR -> "часов"
+                    TimeUnits.DAY -> "дней"
+                }
+        }
+    }
+    return message
+}
+
 enum class TimeUnits(
     var millisecond: Long
 ) {
     SECOND(1000L),
     MINUTE(60 * TimeUnits.SECOND.millisecond),
     HOUR(60 * TimeUnits.MINUTE.millisecond),
-    DAY(24 * HOUR.millisecond)
+    DAY(24 * HOUR.millisecond);
+
+    fun plural(value: Int): String {
+        return createMessageForPlural(value, this)
+    }
 }
 
 enum class Intervals(
