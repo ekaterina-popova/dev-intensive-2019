@@ -157,57 +157,53 @@ fun createMessageAboutDaysFuture(diff: Long): String {
     return message
 }
 
-fun createMessageForPlural(value: Int, type: TimeUnits): String {
-    val lastDigit = value % 10
-    val lastTwoDigits = value % 100
-    var message = "$value "
-    message += if (lastTwoDigits in 11..14) {
-        when (type) {
-            TimeUnits.SECOND -> "секунд"
-            TimeUnits.MINUTE -> "минут"
-            TimeUnits.HOUR -> "часов"
-            TimeUnits.DAY -> "дней"
-        }
-    } else {
-        when (lastDigit) {
-            1 -> {
-                when (type) {
-                    TimeUnits.SECOND -> "секунда"
-                    TimeUnits.MINUTE -> "минута"
-                    TimeUnits.HOUR -> "час"
-                    TimeUnits.DAY -> "день"
-                }
-            }
-            2, 3, 4 -> {
-                when (type) {
-                    TimeUnits.SECOND -> "секунды"
-                    TimeUnits.MINUTE -> "минуты"
-                    TimeUnits.HOUR -> "часа"
-                    TimeUnits.DAY -> "дня"
-                }
-            }
-            else ->
-                when (type) {
-                    TimeUnits.SECOND -> "секунд"
-                    TimeUnits.MINUTE -> "минут"
-                    TimeUnits.HOUR -> "часов"
-                    TimeUnits.DAY -> "дней"
-                }
-        }
-    }
-    return message
-}
-
 enum class TimeUnits(
     var millisecond: Long
 ) {
     SECOND(1000L),
-    MINUTE(60 * TimeUnits.SECOND.millisecond),
-    HOUR(60 * TimeUnits.MINUTE.millisecond),
+    MINUTE(60 * SECOND.millisecond),
+    HOUR(60 * MINUTE.millisecond),
     DAY(24 * HOUR.millisecond);
 
     fun plural(value: Int): String {
-        return createMessageForPlural(value, this)
+        val lastDigit = value % 10
+        val lastTwoDigits = value % 100
+        var message = "$value "
+        message += if (lastTwoDigits in 11..14) {
+            when (this) {
+                SECOND -> "секунд"
+                MINUTE -> "минут"
+                HOUR -> "часов"
+                DAY -> "дней"
+            }
+        } else {
+            when (lastDigit) {
+                1 -> {
+                    when (this) {
+                        SECOND -> "секунда"
+                        MINUTE -> "минута"
+                        HOUR -> "час"
+                        DAY -> "день"
+                    }
+                }
+                2, 3, 4 -> {
+                    when (this) {
+                        SECOND -> "секунды"
+                        MINUTE -> "минуты"
+                        HOUR -> "часа"
+                        DAY -> "дня"
+                    }
+                }
+                else ->
+                    when (this) {
+                        SECOND -> "секунд"
+                        MINUTE -> "минут"
+                        HOUR -> "часов"
+                        DAY -> "дней"
+                    }
+            }
+        }
+        return message
     }
 }
 
